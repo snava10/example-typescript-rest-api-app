@@ -1,0 +1,19 @@
+swagger:
+  outputDirectory: ./dist
+  entryFile:
+    - ./src/controllers/*
+  outputFormat: OpenApi_3
+  name: Example Typescript Rest App
+  description: Example typescript rest app
+  license: MIT
+  produces: [application/json]
+  version: 1.0.0
+  securityDefinitions:
+    default:
+      type: apiKey
+      in: header
+      name: Authorization
+    secondAuthenticator:
+      type: apiKey
+      in: header
+      name: Authorization

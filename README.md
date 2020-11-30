@@ -1,6 +1,6 @@
 # example-typescript-rest-api-app
 
-Use this project a starting point when building your web api with typescript.
+Use this project as the starting point when building your web api with typescript.
 
 ## Features
 

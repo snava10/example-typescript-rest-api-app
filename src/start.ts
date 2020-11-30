@@ -23,13 +23,10 @@ export async function start(port?: number): Promise<ApiServer> {
   return apiServer;
 }
 
-export function assertEnvironment() {
+export function assertEnvironment(): void {
   const errMessage = " variable not set";
 
   if (!process.env.MONGODB_URI) {
     throw new Error("MONGODB_URI" + errMessage);
-  }
-  if (!process.env.JWT_SECRET) {
-    throw new Error("JWT_SECRET" + errMessage);
   }
 }

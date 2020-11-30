@@ -9,7 +9,6 @@
     "build": "npm run clean && tsc -p tsconfig.build.json && npm run swagger",
     "clean": "rimraf dist",
     "lint": "eslint ./src/**/*.ts ./test/**/*.ts --fix",
-    "lint:fix": "tslint --fix ./src/**/*.ts ./test/**/*.ts -t verbose",
     "pretest": "cross-env NODE_ENV=test npm run build && npm run lint",
     "test": "cross-env NODE_ENV=test jest",
     "swagger": "swaggerGen -c ./swagger.config.yml"

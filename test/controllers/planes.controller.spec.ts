@@ -3,8 +3,9 @@ import mongoose from "mongoose";
 import { start } from "../../src/start";
 import { ajax } from "rxjs/ajax";
 import { map } from "rxjs/operators";
-import Plane from "../../src/models/plane.model";
+import Plane, { PlaneModel } from "../../src/models/plane.model";
 import logger from "../../src/logger-factory";
+import * as http from "http";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const xMLHttpRequest = require("xmlhttprequest");
 
@@ -31,18 +32,20 @@ describe("Planes controller", () => {
     await apiServer.stop();
   });
 
+  const boing747 = {
+    manufacturer: "Boeing",
+    name: "747",
+  } as PlaneModel;
+
   beforeEach(async () => {
     logger.debug("Before each ...");
-    const p = new Plane({
-      manufacturer: "Boeing",
-      name: "747",
-    });
-    await Plane.create(p);
+    await Plane.deleteMany({}).exec();
+    await Plane.create(boing747);
   });
 
   afterEach(async () => {
     logger.debug("After each ...");
-    await Plane.deleteMany({}).exec();
+    // await Plane.deleteMany({}).exec();
   });
 
   it("get all", async () => {
@@ -61,8 +64,21 @@ describe("Planes controller", () => {
       .catch((reason) => fail(reason));
   });
 
-  xit("get by name", () => {
-    expect(false).toBeTruthy();
+  it("get by name", async () => {
+    return new Promise((resolve) => {
+      http
+        .get(`${serverBaseUrl}/api/planes/747`, (response) => {
+          expect(response.statusCode).toBe(200);
+          response.on("data", (data) => {
+            expect(data).toBeTruthy();
+            resolve(JSON.parse(data));
+          });
+        })
+        .end();
+    }).then((value: Array<PlaneModel>) => {
+      expect(value.length).toBe(1);
+      expect(value[0]).toMatchObject(boing747);
+    });
   });
 
   xit("create", () => {

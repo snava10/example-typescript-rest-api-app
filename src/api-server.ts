@@ -35,8 +35,8 @@ export class ApiServer {
   /**
    * Start the server
    */
-  public async start() {
-    return new Promise<any>((resolve, reject) => {
+  public async start(): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
       try {
         this.server = this.app.listen(this.PORT, () => {
           logger.info(`Starting server on ${new Date().toLocaleString()}`);
@@ -105,7 +105,7 @@ export class ApiServer {
   private verifyFunction: BasicVerifyFunction = async (
     email: string,
     password: string,
-    done: (error: any, user: any) => void
+    done: (error: unknown, user: unknown) => void
   ) => {
     logger.info("verifying email and password");
     if (email === "test@test.com" && password === "p@ssword") {

@@ -9,7 +9,7 @@ export class LoggerFactory {
           type: "stdout",
           layout: {
             type: "pattern",
-            pattern: "%d %p %c %f:%l %m%n",
+            pattern: "%[%d %p %] %f{1}:%l %m%n",
           },
         },
       },

@@ -13,7 +13,7 @@ export class MongoConnector {
     const envFile: string = envfile || process.env.ENVFILE || ".env";
     config({ path: envFile });
 
-    (mongoose as any).Promise = global.Promise;
+    mongoose.Promise = global.Promise;
   }
 
   /**

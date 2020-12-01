@@ -6,6 +6,7 @@ import { map } from "rxjs/operators";
 import Plane, { PlaneModel } from "../../src/models/plane.model";
 import logger from "../../src/logger-factory";
 import * as http from "http";
+import * as rm from "typed-rest-client/RestClient";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const xMLHttpRequest = require("xmlhttprequest");
 
@@ -32,7 +33,7 @@ describe("Planes controller", () => {
     await apiServer.stop();
   });
 
-  const boing747 = {
+  const boeing747 = {
     manufacturer: "Boeing",
     name: "747",
   } as PlaneModel;
@@ -40,7 +41,7 @@ describe("Planes controller", () => {
   beforeEach(async () => {
     logger.debug("Before each ...");
     await Plane.deleteMany({}).exec();
-    await Plane.create(boing747);
+    await Plane.create(boeing747);
   });
 
   afterEach(async () => {
@@ -64,6 +65,16 @@ describe("Planes controller", () => {
       .catch((reason) => fail(reason));
   });
 
+  it("get by manufacturer", async () => {
+    const rest: rm.RestClient = new rm.RestClient("test-agent");
+    const res: rm.IRestResponse<Array<PlaneModel>> = await rest.get<
+      Array<PlaneModel>
+    >(`${serverBaseUrl}/api/planes/747`);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.result[0]).toMatchObject(boeing747);
+  });
+
   it("get by name", async () => {
     return new Promise((resolve) => {
       http
@@ -77,7 +88,7 @@ describe("Planes controller", () => {
         .end();
     }).then((value: Array<PlaneModel>) => {
       expect(value.length).toBe(1);
-      expect(value[0]).toMatchObject(boing747);
+      expect(value[0]).toMatchObject(boeing747);
     });
   });
 

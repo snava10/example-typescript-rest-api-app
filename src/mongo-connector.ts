@@ -11,7 +11,7 @@ export class MongoConnector {
      * Load environment variables from .env file, where API keys and passwords are configured.
      */
     const envFile: string = envfile || process.env.ENVFILE || ".env";
-    config({ path: envFile });
+    config({ path: envFile, debug: true });
 
     mongoose.Promise = global.Promise;
   }
@@ -21,7 +21,7 @@ export class MongoConnector {
    * @returns {Promise<void>}
    */
   public connect(mongoUri?: string): Promise<void> {
-    mongoUri = mongoUri || process.env.MONGODB_URI;
+    mongoUri = mongoUri || process.env.MONGODB_URI || "mongodb://localhost";
     return new Promise<void>((resolve, reject) => {
       const options: ConnectionOptions = {
         keepAlive: true,

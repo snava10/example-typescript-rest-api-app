@@ -10,7 +10,7 @@
     "clean": "rimraf dist",
     "lint": "eslint ./src/**/*.ts ./test/**/*.ts --fix",
     "pretest": "cross-env NODE_ENV=test npm run build && npm run lint",
-    "test": "cross-env NODE_ENV=test jest",
+    "test": "cross-env NODE_ENV=test ENV_FILE=.env jest",
     "swagger": "swaggerGen -c ./swagger.config.yml"
   },
   "author": "snava10",

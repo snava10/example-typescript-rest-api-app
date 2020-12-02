@@ -4,8 +4,8 @@ import { ApiServer } from "./api-server";
 
 export async function start(port?: number): Promise<ApiServer> {
   const envFile: string = process.env.ENVFILE || ".env";
-  config({ path: envFile });
-  assertEnvironment();
+  config({ path: envFile, debug: true });
+  // assertEnvironment();
 
   const mongoConnector = new MongoConnector(envFile);
   const apiServer = new ApiServer(mongoConnector, port);

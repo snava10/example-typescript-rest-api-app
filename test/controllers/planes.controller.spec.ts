@@ -25,12 +25,13 @@ describe("Planes controller", () => {
 
   afterAll(async () => {
     logger.debug("After all ...");
-    await mongoose.connection.collections.planes.drop().then(
-      (value) => logger.debug(value),
-      (error) => logger.error(error)
-    );
-    // This line must come after dropping the collection because stop() will close the connection.
-    await apiServer.stop();
+    try {
+      await mongoose.connection.dropCollection("planes");
+      // This line must come after dropping the collection because stop() will close the connection.
+      await apiServer.stop();
+    } catch (error) {
+      logger.error(error.message);
+    }
   });
 
   const boeing747 = {
@@ -46,7 +47,7 @@ describe("Planes controller", () => {
 
   afterEach(async () => {
     logger.debug("After each ...");
-    // await Plane.deleteMany({}).exec();
+    await Plane.deleteMany({}).exec();
   });
 
   it("get all", async () => {

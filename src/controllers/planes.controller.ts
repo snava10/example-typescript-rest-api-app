@@ -21,10 +21,10 @@ export class PlanesController {
 
   @PUT
   update(plane: PlaneModel): Promise<PlaneModel> {
-    return Plane.replaceOne({ _id: plane.id }, plane).exec();
+    return Plane.findByIdAndUpdate(plane.id, plane).exec();
   }
 
-  delete(planeId: string): Promise<{ deletedCount?: number }> {
-    return Plane.deleteOne({ _id: planeId }).exec();
+  delete(planeId: string): Promise<PlaneModel> {
+    return Plane.findByIdAndDelete(planeId).exec();
   }
 }

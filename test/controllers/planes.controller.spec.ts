@@ -25,7 +25,7 @@ describe("Planes controller", () => {
 
   afterAll(async () => {
     logger.debug("After all ...");
-    await mongoose.connection.collections.planes.drop().then(
+    await mongoose.connection.dropCollection("planes").then(
       (value) => logger.debug(value),
       (error) => logger.error(error)
     );
@@ -40,7 +40,7 @@ describe("Planes controller", () => {
 
   beforeEach(async () => {
     logger.debug("Before each ...");
-    await Plane.deleteMany({}).exec();
+    await Plane.remove({}).exec();
     await Plane.create(boeing747);
   });
 

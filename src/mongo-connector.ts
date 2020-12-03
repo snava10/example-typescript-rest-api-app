@@ -21,7 +21,10 @@ export class MongoConnector {
    * @returns {Promise<void>}
    */
   public connect(mongoUri?: string): Promise<void> {
-    mongoUri = mongoUri || process.env.MONGODB_URI;
+    mongoUri =
+      mongoUri ||
+      process.env.MONGODB_URI ||
+      "mongodb://root:passw0rd@localhost:27017/test?authSource=admin";
     return new Promise<void>((resolve, reject) => {
       const options: ConnectionOptions = {
         keepAlive: true,

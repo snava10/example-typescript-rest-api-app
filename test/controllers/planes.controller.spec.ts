@@ -25,12 +25,19 @@ describe("Planes controller", () => {
 
   afterAll(async () => {
     logger.debug("After all ...");
-    await mongoose.connection.dropCollection("planes").then(
-      (value) => logger.debug(value),
-      (error) => logger.error(error)
-    );
-    // This line must come after dropping the collection because stop() will close the connection.
-    await apiServer.stop();
+    try {
+      await mongoose.connection.dropCollection("planes");
+      // This line must come after dropping the collection because stop() will close the connection.
+      await apiServer.stop();
+    } catch (error) {
+      if (error.message === "ns not found") return;
+      // This error happens when you use it.todo.
+      // Safe to ignore.
+      if (error.message.includes("a background operation is currently running"))
+        return;
+
+      logger.error(error.message);
+    }
   });
 
   const boeing747 = {

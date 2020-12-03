@@ -40,7 +40,7 @@ describe("Planes controller", () => {
 
   beforeEach(async () => {
     logger.debug("Before each ...");
-    await Plane.remove({}).exec();
+    await Plane.deleteMany({}).exec();
     await Plane.create(boeing747);
   });
 

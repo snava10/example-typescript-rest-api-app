@@ -11,7 +11,7 @@ export class MongoConnector {
      * Load environment variables from .env file, where API keys and passwords are configured.
      */
     const envFile: string = envfile || process.env.ENVFILE || ".env";
-    config({ path: envFile });
+    config({ path: envFile, debug: true });
 
     mongoose.Promise = global.Promise;
   }

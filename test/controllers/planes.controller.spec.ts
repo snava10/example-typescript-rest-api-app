@@ -30,12 +30,6 @@ describe("Planes controller", () => {
       // This line must come after dropping the collection because stop() will close the connection.
       await apiServer.stop();
     } catch (error) {
-      if (error.message === "ns not found") return;
-      // This error happens when you use it.todo.
-      // Safe to ignore.
-      if (error.message.includes("a background operation is currently running"))
-        return;
-
       logger.error(error.message);
     }
   });
@@ -53,7 +47,7 @@ describe("Planes controller", () => {
 
   afterEach(async () => {
     logger.debug("After each ...");
-    // await Plane.deleteMany({}).exec();
+    await Plane.deleteMany({}).exec();
   });
 
   it("get all", async () => {

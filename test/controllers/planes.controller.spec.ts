@@ -10,7 +10,7 @@ import * as rm from "typed-rest-client/RestClient";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const xMLHttpRequest = require("xmlhttprequest");
 import { GenericContainer, StartedTestContainer } from "testcontainers";
-// import { MongoEnvVars } from "../../src/mongo-connector";
+import { MongoEnvVars } from "../../src/mongo-connector";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function createXHR() {
@@ -31,19 +31,17 @@ describe("Planes controller", () => {
         .withEnv("MONGO_INITDB_ROOT_PASSWORD", "passw0rd")
         .withEnv("MONGO_INITDB_DATABASE", "test")
         .start();
-
-      // const host = mongoContainer.getHost();
     } catch (e) {
       logger.error(e);
     }
-    // const mongoEnvVars: MongoEnvVars = {
-    //   username: "root",
-    //   password: "passw0rd",
-    //   host: mongoContainer.getHost(),
-    //   port: mongoContainer.getMappedPort(27017),
-    //   db: "test",
-    // };
-    apiServer = await start();
+    const mongoEnvVars: MongoEnvVars = {
+      username: "root",
+      password: "passw0rd",
+      host: mongoContainer.getHost(),
+      port: mongoContainer.getMappedPort(27017),
+      db: "test",
+    };
+    apiServer = await start(3000, mongoEnvVars);
   });
 
   afterAll(async () => {

@@ -56,10 +56,17 @@ export class MongoConnector {
   }
 
   public getMongoUri(envVars?: MongoEnvVars): string {
-    if (!envVars) {
-      return "mongodb://localhost";
+    envVars = envVars || loadMongoEnvVars();
+    if (
+      envVars.host &&
+      envVars.port &&
+      envVars.db &&
+      envVars.username &&
+      envVars.password
+    ) {
+      return `mongodb://${envVars.username}:${envVars.password}@${envVars.host}:${envVars.port}/${envVars.db}?authSource=admin`;
     }
-    return `mongodb://${envVars.username}:${envVars.password}@${envVars.host}:${envVars.port}/${envVars.db}?authSource=admin`;
+    return `mongodb://localhost`;
   }
 }
 

@@ -24,24 +24,29 @@ describe("Planes controller", () => {
   beforeAll(async () => {
     logger.debug("Before all ...");
 
-    try {
-      mongoContainer = await new GenericContainer("mongo", "latest")
-        .withExposedPorts(27017)
-        .withEnv("MONGO_INITDB_ROOT_USERNAME", "root")
-        .withEnv("MONGO_INITDB_ROOT_PASSWORD", "passw0rd")
-        .withEnv("MONGO_INITDB_DATABASE", "test")
-        .start();
-    } catch (e) {
-      logger.error(e);
+    if (process.env.NODE_ENV === "ci") {
+      logger.info("Running continuous integration");
+      apiServer = await start();
+    } else {
+      try {
+        mongoContainer = await new GenericContainer("mongo", "latest")
+          .withExposedPorts(27017)
+          .withEnv("MONGO_INITDB_ROOT_USERNAME", "root")
+          .withEnv("MONGO_INITDB_ROOT_PASSWORD", "passw0rd")
+          .withEnv("MONGO_INITDB_DATABASE", "test")
+          .start();
+      } catch (e) {
+        logger.error(e);
+      }
+      const mongoEnvVars: MongoEnvVars = {
+        username: "root",
+        password: "passw0rd",
+        host: mongoContainer.getHost(),
+        port: mongoContainer.getMappedPort(27017),
+        db: "test",
+      };
+      apiServer = await start(3000, mongoEnvVars);
     }
-    const mongoEnvVars: MongoEnvVars = {
-      username: "root",
-      password: "passw0rd",
-      host: mongoContainer.getHost(),
-      port: mongoContainer.getMappedPort(27017),
-      db: "test",
-    };
-    apiServer = await start(3000, mongoEnvVars);
   });
 
   afterAll(async () => {

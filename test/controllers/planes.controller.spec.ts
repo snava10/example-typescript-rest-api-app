@@ -36,14 +36,14 @@ describe("Planes controller", () => {
     } catch (e) {
       logger.error(e);
     }
-    const mongoEnvVars: MongoEnvVars = {
-      username: "root",
-      password: "passw0rd",
-      host: mongoContainer.getHost(),
-      port: mongoContainer.getMappedPort(27017),
-      db: "test",
-    };
-    apiServer = await start(3000, mongoEnvVars);
+    // const mongoEnvVars: MongoEnvVars = {
+    //   username: "root",
+    //   password: "passw0rd",
+    //   host: mongoContainer.getHost(),
+    //   port: mongoContainer.getMappedPort(27017),
+    //   db: "test",
+    // };
+    apiServer = await start();
   });
 
   afterAll(async () => {

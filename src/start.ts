@@ -1,8 +1,11 @@
 import { config } from "dotenv";
-import { MongoConnector } from "./mongo-connector";
+import { MongoConnector, MongoEnvVars } from "./mongo-connector";
 import { ApiServer } from "./api-server";
 
-export async function start(port?: number): Promise<ApiServer> {
+export async function start(
+  port?: number,
+  mongoEnvVars?: MongoEnvVars
+): Promise<ApiServer> {
   const envFile: string = process.env.ENVFILE || ".env";
   config({ path: envFile, debug: true });
   // assertEnvironment();
@@ -10,7 +13,7 @@ export async function start(port?: number): Promise<ApiServer> {
   const mongoConnector = new MongoConnector(envFile);
   const apiServer = new ApiServer(mongoConnector, port);
   await apiServer.start();
-  await mongoConnector.connect();
+  await mongoConnector.connect(mongoEnvVars);
   const graceful = async () => {
     await mongoConnector.disconnect();
     await apiServer.stop();

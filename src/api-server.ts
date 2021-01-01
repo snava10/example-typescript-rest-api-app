@@ -2,7 +2,6 @@ import logger from "./logger-factory";
 import cors from "cors";
 import express from "express";
 import * as http from "http";
-import * as path from "path";
 import { PassportAuthenticator, Server } from "typescript-rest";
 import { MongoConnector } from "./mongo-connector";
 import { BasicStrategy, BasicVerifyFunction } from "passport-http";
@@ -82,9 +81,6 @@ export class ApiServer {
    */
   private config(): void {
     // Native Express configuration
-    this.app.use(
-      express.static(path.join(__dirname, "public"), { maxAge: 31557600000 })
-    );
     this.app.use(cors());
     this.configureAuthenticator();
   }

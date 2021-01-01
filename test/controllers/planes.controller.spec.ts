@@ -9,6 +9,8 @@ import * as http from "http";
 import * as rm from "typed-rest-client/RestClient";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const xMLHttpRequest = require("xmlhttprequest");
+import { GenericContainer, StartedTestContainer } from "testcontainers";
+import { MongoEnvVars } from "../../src/mongo-connector";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function createXHR() {
@@ -17,10 +19,31 @@ function createXHR() {
 
 describe("Planes controller", () => {
   let apiServer: ApiServer;
+  let mongoContainer: StartedTestContainer;
   const serverBaseUrl = "http://localhost:3000";
   beforeAll(async () => {
     logger.debug("Before all ...");
-    apiServer = await start();
+
+    try {
+      mongoContainer = await new GenericContainer("mongo", "latest")
+        .withExposedPorts(27017)
+        .withEnv("MONGO_INITDB_ROOT_USERNAME", "root")
+        .withEnv("MONGO_INITDB_ROOT_PASSWORD", "passw0rd")
+        .withEnv("MONGO_INITDB_DATABASE", "test")
+        .start();
+
+      // const host = mongoContainer.getHost();
+    } catch (e) {
+      logger.error(e);
+    }
+    const mongoEnvVars: MongoEnvVars = {
+      username: "root",
+      password: "passw0rd",
+      host: mongoContainer.getHost(),
+      port: mongoContainer.getMappedPort(27017),
+      db: "test",
+    };
+    apiServer = await start(3000, mongoEnvVars);
   });
 
   afterAll(async () => {
@@ -32,6 +55,7 @@ describe("Planes controller", () => {
     } catch (error) {
       logger.error(error.message);
     }
+    mongoContainer.stop();
   });
 
   const boeing747 = {

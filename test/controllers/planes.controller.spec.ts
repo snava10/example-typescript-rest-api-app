@@ -10,7 +10,7 @@ import * as rm from "typed-rest-client/RestClient";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const xMLHttpRequest = require("xmlhttprequest");
 import { GenericContainer, StartedTestContainer } from "testcontainers";
-import { MongoEnvVars } from "../../src/mongo-connector";
+// import { MongoEnvVars } from "../../src/mongo-connector";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function createXHR() {

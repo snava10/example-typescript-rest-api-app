@@ -1,4 +1,12 @@
-import { GET, Path, PathParam, POST, PUT } from "typescript-rest";
+import {
+  DELETE,
+  GET,
+  Path,
+  PathParam,
+  POST,
+  PUT,
+  Security,
+} from "typescript-rest";
 import Plane, { PlaneModel } from "../models/plane.model";
 
 @Path("api/planes/")
@@ -24,6 +32,8 @@ export class PlanesController {
     return Plane.findByIdAndUpdate(plane.id, plane).exec();
   }
 
+  @DELETE
+  @Security(["ADMIN"])
   delete(planeId: string): Promise<PlaneModel> {
     return Plane.findByIdAndDelete(planeId).exec();
   }
